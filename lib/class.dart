@@ -6,23 +6,23 @@ void fireGun(Weapon weapon) {
 
 void reload(Weapon weapon) {
   if (weapon.currentAmmo != weapon.clipCapacity) {
-    weapon.clipCapacity = weapon.clipCapacity;
+    weapon.currentAmmo = weapon.clipCapacity;
   }
 }
 
 class Weapon {
   Weapon({
-    this.accuracy,
-    this.clipCapacity,
-    this.damage,
+    required this.accuracy,
+    required this.clipCapacity,
+    required this.damage,
     required this.sprite,
     required this.currentAmmo,
   });
-  int? clipCapacity;
+  int clipCapacity;
   int currentAmmo;
-  int? damage;
-  int? accuracy;
-  String? sprite;
+  int damage;
+  int accuracy;
+  String sprite;
 }
 
 class Stats {
