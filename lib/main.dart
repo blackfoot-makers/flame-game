@@ -1,24 +1,11 @@
-import 'dart:async';
-
+import 'package:flame/flame.dart';
 import 'package:flame/game.dart';
-import 'package:flame_tiled/flame_tiled.dart';
+import 'package:flame_game/main_game/melvyn_plus_plus_game.dart';
 import 'package:flutter/material.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Flame.device.setLandscape();
   final MelvynPlusPlusGame game = MelvynPlusPlusGame();
   runApp(GameWidget<MelvynPlusPlusGame>(game: game));
-}
-
-class MelvynPlusPlusGame extends FlameGame {
-  @override
-  Future<void> onLoad() async {
-    await super.onLoad();
-    final TiledComponent tiledMap = await TiledComponent.load(
-      'map.tmx',
-      Vector2.all(16),
-    );
-    unawaited(add(tiledMap));
-    // await Flame.images.load('klondike-sprites.png');
-  }
 }
