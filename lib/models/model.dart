@@ -1,9 +1,6 @@
 import 'package:json_annotation/json_annotation.dart';
-import 'package:uuid/uuid.dart';
 
-part 'class.g.dart';
-
-void nullSkill(Game game) {}
+part 'model.g.dart';
 
 @JsonSerializable()
 class Box {
@@ -73,7 +70,7 @@ class Soldiers {
     required this.stats,
     required this.sprite,
     required this.weapon,
-    this.passiv = nullSkill,
+    this.passiv,
     this.ammo = 0,
     this.carryBox = false,
     required this.uuid,
@@ -88,7 +85,7 @@ class Soldiers {
   bool carryBox;
   int ammo;
   @JsonKey(ignore: true)
-  Function(Game game) passiv;
+  Function(Game game)? passiv;
 }
 
 @JsonSerializable()
@@ -96,14 +93,14 @@ class Monster {
   Monster({
     required this.stats,
     required this.sprite,
-    this.skill = nullSkill,
+    this.skill,
     required this.uuid,
   });
   factory Monster.fromJson(Map<String, dynamic> json) =>
       _$MonsterFromJson(json);
   Map<String, dynamic> toJson() => _$MonsterToJson(this);
   @JsonKey(ignore: true)
-  final Function(Game game) skill;
+  final Function(Game game)? skill;
   String uuid;
   final Stats stats;
   final String sprite;
