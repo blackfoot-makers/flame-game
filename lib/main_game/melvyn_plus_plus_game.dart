@@ -24,9 +24,6 @@ class MelvynPlusPlusGame extends FlameGame
     );
     unawaited(add(tiledMap));
 
-    player = Player();
-    unawaited(add(player));
-
     final Paint knobPaint = BasicPalette.white.withAlpha(200).paint();
     final Paint backgroundPaint = BasicPalette.white.withAlpha(100).paint();
     joystick = JoystickComponent(
@@ -34,6 +31,9 @@ class MelvynPlusPlusGame extends FlameGame
       background: CircleComponent(radius: 50, paint: backgroundPaint),
       margin: const EdgeInsets.only(left: 40, bottom: 40),
     );
+
+    player = Player(joystick);
+    unawaited(add(player));
 
     unawaited(add(joystick));
   }
