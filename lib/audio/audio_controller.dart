@@ -3,54 +3,59 @@ import 'package:flame_audio/audio_pool.dart';
 import 'package:flame_audio/flame_audio.dart';
 
 class AudioController {
-  static AudioCache audioCache = AudioCache(prefix: 'assets/audio');
-
   Future<void> cacheAllFiles() async {
-    await audioCache.loadAll(<String>['ambiance.wav', 'run.wav']);
+    await FlameAudio.audioCache.loadAll(<String>['ambiance.wav', 'run.wav']);
   }
 
   void initializeBackgroundMusic() {
     FlameAudio.bgm.initialize();
   }
 
+  void playBackgroundMusic(String file, {double volume = 1.0}) {
+    FlameAudio.bgm.play(file, volume: volume);
+  }
+
   void disposeBackgroundMusic() {
     FlameAudio.bgm.dispose();
   }
 
-  // Audio pools is reccomended for sfx like lazers, shots, etc.
+  // https://docs.flame-engine.org/main/flame_audio/audio_pool.html
   Future<AudioPool> createPool(String filename) async {
     return AudioPool.create(
-      'audio/$filename',
-      audioCache: audioCache,
-      maxPlayers: 1, // TODO(alex): Get the number of players
+      filename,
+      maxPlayers: 1,
     );
   }
 
-  void play(
+  // TODO(tun43p): Convert to FlameAudio function
+  Future<void> play(
     String file, {
-    bool isBackgroundMusic = false,
     bool isLongAudio = false,
     double volume = 1.0,
-  }) {
-    if (isBackgroundMusic) {
-      FlameAudio.bgm.play(file, volume: volume);
-    } else if (isLongAudio) {
-      FlameAudio.playLongAudio(file, volume: volume);
-    } else {
-      FlameAudio.play(file, volume: volume);
-    }
+  }) async {
+    await AudioPlayer(playerId: file).play(AssetSource('audio/$file'));
+
+    // return isLongAudio
+    //     ? await FlameAudio.playLongAudio(file, volume: volume)
+    //     : await FlameAudio.play(file, volume: volume);
   }
 
-  void loop(
-    String file,
-    bool isPlaying, {
+  // TODO(tun43p): Convert to FlameAudio function
+  Future<void> stop(String file) async {
+    await AudioPlayer(playerId: file).stop();
+
+    // return isLongAudio
+    //     ? await FlameAudio.playLongAudio(file, volume: volume)
+    //     : await FlameAudio.play(file, volume: volume);
+  }
+
+  Future<AudioPlayer> loop(
+    String file, {
     bool isLongAudio = false,
     double volume = 1.0,
-  }) {
-    if (isLongAudio && isPlaying) {
-      FlameAudio.loopLongAudio(file, volume: volume);
-    } else {
-      FlameAudio.loop(file, volume: volume);
-    }
+  }) async {
+    return isLongAudio
+        ? await FlameAudio.loopLongAudio(file, volume: volume)
+        : await FlameAudio.loop(file, volume: volume);
   }
 }
