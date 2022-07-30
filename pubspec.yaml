@@ -12,6 +12,7 @@ dependencies:
   cupertino_icons: ^1.0.2
   flame: 1.2.0
   flame_audio: 1.2.0
+  flame_tiled: ^1.5.0
   flutter:
     sdk: flutter
 
@@ -24,4 +25,6 @@ flutter:
   uses-material-design: true
 
   assets:
-    - "assets/audio/"
+    - assets/audio/
+    - assets/images/
+    - assets/tiles/
