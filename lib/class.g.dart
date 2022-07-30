@@ -54,9 +54,11 @@ Soldiers _$SoldiersFromJson(Map<String, dynamic> json) => Soldiers(
       weapon: Weapon.fromJson(json['weapon'] as Map<String, dynamic>),
       ammo: json['ammo'] as int? ?? 0,
       carryBox: json['carryBox'] as bool? ?? false,
+      uuid: json['uuid'] as String,
     );
 
 Map<String, dynamic> _$SoldiersToJson(Soldiers instance) => <String, dynamic>{
+      'uuid': instance.uuid,
       'stats': instance.stats,
       'sprite': instance.sprite,
       'weapon': instance.weapon,
@@ -67,9 +69,11 @@ Map<String, dynamic> _$SoldiersToJson(Soldiers instance) => <String, dynamic>{
 Monster _$MonsterFromJson(Map<String, dynamic> json) => Monster(
       stats: Stats.fromJson(json['stats'] as Map<String, dynamic>),
       sprite: json['sprite'] as String,
+      uuid: json['uuid'] as String,
     );
 
 Map<String, dynamic> _$MonsterToJson(Monster instance) => <String, dynamic>{
+      'uuid': instance.uuid,
       'stats': instance.stats,
       'sprite': instance.sprite,
     };

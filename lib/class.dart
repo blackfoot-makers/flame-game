@@ -1,4 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
+import 'package:uuid/uuid.dart';
 
 part 'class.g.dart';
 
@@ -75,10 +76,12 @@ class Soldiers {
     this.passiv = nullSkill,
     this.ammo = 0,
     this.carryBox = false,
+    required this.uuid,
   });
   factory Soldiers.fromJson(Map<String, dynamic> json) =>
       _$SoldiersFromJson(json);
   Map<String, dynamic> toJson() => _$SoldiersToJson(this);
+  String uuid;
   Stats stats;
   String sprite;
   Weapon weapon;
@@ -94,12 +97,14 @@ class Monster {
     required this.stats,
     required this.sprite,
     this.skill = nullSkill,
+    required this.uuid,
   });
   factory Monster.fromJson(Map<String, dynamic> json) =>
       _$MonsterFromJson(json);
   Map<String, dynamic> toJson() => _$MonsterToJson(this);
   @JsonKey(ignore: true)
   final Function(Game game) skill;
+  String uuid;
   final Stats stats;
   final String sprite;
 }
