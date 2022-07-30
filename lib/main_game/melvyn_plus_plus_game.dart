@@ -5,6 +5,7 @@ import 'package:flame/events.dart';
 import 'package:flame/experimental.dart';
 import 'package:flame/game.dart';
 import 'package:flame/palette.dart';
+import 'package:flame_game/audio/audio_controller.dart';
 import 'package:flame_game/main_game/constant.dart';
 import 'package:flame_game/main_game/player.dart';
 import 'package:flame_tiled/flame_tiled.dart';
@@ -18,6 +19,10 @@ class MelvynPlusPlusGame extends FlameGame
   @override
   Future<void> onLoad() async {
     await super.onLoad();
+
+    await AudioController().cacheAllFiles();
+    AudioController().play('ambiance.wav', isBackgroundMusic: true);
+
     final TiledComponent tiledMap = await TiledComponent.load(
       'map.tmx',
       kTitleSize,

@@ -1,6 +1,7 @@
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flame_audio/flame_audio.dart';
 
-enum AudioController {
+enum AudioModel {
   ambiance(filename: 'ambiance.wav', bgm: true),
   fire(filename: 'fire.wav'),
   pickup(filename: 'pick_up_1.wav'),
@@ -8,7 +9,7 @@ enum AudioController {
   run(filename: 'run.wav'),
   walk(filename: 'walk.wav');
 
-  const AudioController({required this.filename, this.bgm = false});
+  const AudioModel({required this.filename, this.bgm = false});
 
   final String filename;
   final bool bgm;
@@ -21,8 +22,14 @@ enum AudioController {
     }
   }
 
-  void loop(double? volume) {
-    FlameAudio.loop(filename, volume: volume ?? 1.0);
+  Future<void> loop(bool isLooping, double? volume) async {
+    AudioPlayer? player;
+
+    if (isLooping) {
+      player = await FlameAudio.loop(filename, volume: volume ?? 1.0);
+    } else {
+      if (player != null) await player.stop();
+    }
   }
 
   void disposeBgm() {
