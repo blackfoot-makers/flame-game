@@ -1,57 +1,31 @@
 import 'package:flame_audio/flame_audio.dart';
 
-class Audio {}
+enum AudioController {
+  ambiance(filename: 'ambiance.wav', bgm: true),
+  fire(filename: 'fire.wav'),
+  pickup(filename: 'pick_up_1.wav'),
+  refill(filename: 'refill.wav'),
+  run(filename: 'run.wav'),
+  walk(filename: 'walk.wav');
 
-class AudioController {
-  Future<void> cacheAllAudioFiles() async {
-    await FlameAudio.audioCache.loadAll(
-      <String>[
-        'ambiance.wav',
-        'fire.wav',
-        'pick_up_1.wav',
-        'pick_up_2.wav',
-        'refill.wav',
-        'run.wav',
-        'walk.wav'
-      ],
-    );
-  }
+  const AudioController({required this.filename, this.bgm = false});
 
-  void initializeBackgroundMusic() {
-    FlameAudio.bgm.initialize();
-  }
+  final String filename;
+  final bool bgm;
 
-  void disposeBackgroundMusic() {
-    FlameAudio.bgm.dispose();
-  }
-
-  void stopBackgroundMusic() {
-    FlameAudio.bgm.stop();
-  }
-
-  void playBackgroundMusic() {
-    FlameAudio.bgm.play('ambiance.wav', volume: 0.25);
-  }
-
-  void playFire() {
-    FlameAudio.play('fire.wav');
-  }
-
-  void playRefill() {
-    FlameAudio.play('refill.wav');
-  }
-
-  void playPickUp(int pickupIndex) {
-    FlameAudio.play('pick_up_$pickupIndex.wav');
-  }
-
-  void loopIsWalking() {
-    FlameAudio.play('walk.wav');
-  }
-
-  void loopIsRunning(bool isRunning) {
-    if (isRunning) {
-      FlameAudio.loop('run.wav');
+  void play(double? volume) {
+    if (bgm) {
+      FlameAudio.bgm.play(filename, volume: volume ?? 1.0);
+    } else {
+      FlameAudio.play(filename, volume: volume ?? 1.0);
     }
+  }
+
+  void loop(double? volume) {
+    FlameAudio.loop(filename, volume: volume ?? 1.0);
+  }
+
+  void disposeBgm() {
+    FlameAudio.bgm.dispose();
   }
 }
