@@ -23,6 +23,8 @@ class Box {
     required this.path,
   });
   factory Box.fromJson(Map<String, dynamic> json) => _$BoxFromJson(json);
+  Map<String, dynamic> toJson() => _$BoxToJson(this);
+
   int strenghRequirement;
   String path;
 }
@@ -37,6 +39,7 @@ class Weapon {
     required this.currentAmmo,
   });
   factory Weapon.fromJson(Map<String, dynamic> json) => _$WeaponFromJson(json);
+  Map<String, dynamic> toJson() => _$WeaponToJson(this);
   int clipCapacity;
   int currentAmmo;
   int damage;
@@ -54,6 +57,8 @@ class Stats {
     required this.speed,
   });
   factory Stats.fromJson(Map<String, dynamic> json) => _$StatsFromJson(json);
+  Map<String, dynamic> toJson() => _$StatsToJson(this);
+
   int strenght;
   int accuracy;
   int speed;
@@ -91,6 +96,7 @@ class Monster {
   });
   factory Monster.fromJson(Map<String, dynamic> json) =>
       _$MonsterFromJson(json);
+  Map<String, dynamic> toJson() => _$MonsterToJson(this);
   @JsonKey(ignore: true)
   final Function(Game game) skill;
   final Stats stats;
@@ -103,5 +109,7 @@ class Game {
     required this.name,
   });
   factory Game.fromJson(Map<String, dynamic> json) => _$GameFromJson(json);
+  Map<String, dynamic> toJson() => _$GameToJson(this);
+
   final String name;
 }
