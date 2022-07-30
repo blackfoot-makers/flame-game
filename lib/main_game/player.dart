@@ -4,9 +4,11 @@ import 'package:flame_game/main_game/melvyn_plus_plus_game.dart';
 import 'package:flutter/material.dart';
 
 class Player extends PositionComponent with HasGameRef<MelvynPlusPlusGame> {
+  Player(this.joystick);
+
   static final Paint _paint = Paint()..color = Colors.white;
-  JoystickDirection collidedDirection = JoystickDirection.idle;
   static const double _playerSpeed = 200;
+  final JoystickComponent joystick;
 
   @override
   Future<void> onLoad() async {
@@ -23,27 +25,10 @@ class Player extends PositionComponent with HasGameRef<MelvynPlusPlusGame> {
   @override
   void update(double dt) {
     super.update(dt);
-    final bool moveLeft = gameRef.joystick.direction == JoystickDirection.left;
-    final bool moveRight =
-        gameRef.joystick.direction == JoystickDirection.right;
-    final bool moveUp = gameRef.joystick.direction == JoystickDirection.up;
-    final bool moveDown = gameRef.joystick.direction == JoystickDirection.down;
-    final double vectorX =
-        (gameRef.joystick.relativeDelta * _playerSpeed * dt)[0];
-    final double vectorY =
-        (gameRef.joystick.relativeDelta * _playerSpeed * dt)[1];
 
-    if (moveLeft) {
-      x += vectorX;
-    } else if (moveRight) {
-      x += vectorX;
-    } else if (moveUp) {
-      y += vectorY;
-    } else if (moveDown) {
-      y += vectorY;
-    } else {
-      x += vectorX;
-      y += vectorY;
+    if (joystick.direction != JoystickDirection.idle) {
+      position.add(joystick.relativeDelta * _playerSpeed * dt);
+      angle = joystick.delta.screenAngle();
     }
 
     gameRef.camera.followComponent(this);
