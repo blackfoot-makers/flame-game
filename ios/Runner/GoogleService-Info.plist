@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>808769087237-i2llktj7r6ko11lr7o3e5fu8lm46hf4j.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.808769087237-i2llktj7r6ko11lr7o3e5fu8lm46hf4j</string>
+	<key>API_KEY</key>
+	<string>AIzaSyAZ-F3c5bDa02sNuOd-wm53oBq7t1Ck7FQ</string>
+	<key>GCM_SENDER_ID</key>
+	<string>808769087237</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.example.flameGame</string>
+	<key>PROJECT_ID</key>
+	<string>melvyn-game-plus-plus</string>
+	<key>STORAGE_BUCKET</key>
+	<string>melvyn-game-plus-plus.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:808769087237:ios:4fa810d362b676e2c7f96c</string>
+</dict>
+</plist>

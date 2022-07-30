@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "808769087237",
+    "project_id": "melvyn-game-plus-plus",
+    "storage_bucket": "melvyn-game-plus-plus.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:808769087237:android:0cb024085f2a9c76c7f96c",
+        "android_client_info": {
+          "package_name": "com.example.flame_game"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "808769087237-inkhdh0pedple7fh2avmppdqpm10fltl.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD-BinpBtwQyIeIqpu2Km42hxwONbUc0ok"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "808769087237-inkhdh0pedple7fh2avmppdqpm10fltl.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
