@@ -2,18 +2,6 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'class.g.dart';
 
-void fireGun(Soldiers soldiers) {
-  if (soldiers.weapon.currentAmmo != 0 && soldiers.carryBox == false) {
-    soldiers.weapon.currentAmmo -= 1;
-  }
-}
-
-void reload(Weapon weapon) {
-  if (weapon.currentAmmo != weapon.clipCapacity) {
-    weapon.currentAmmo = weapon.clipCapacity;
-  }
-}
-
 void nullSkill(Game game) {}
 
 @JsonSerializable()
@@ -39,6 +27,18 @@ class Weapon {
     required this.currentAmmo,
   });
   factory Weapon.fromJson(Map<String, dynamic> json) => _$WeaponFromJson(json);
+  void fireGun(Soldiers soldiers) {
+    if (soldiers.weapon.currentAmmo != 0 && soldiers.carryBox == false) {
+      soldiers.weapon.currentAmmo -= 1;
+    }
+  }
+
+  void reload(Weapon weapon) {
+    if (weapon.currentAmmo != weapon.clipCapacity) {
+      weapon.currentAmmo = weapon.clipCapacity;
+    }
+  }
+
   Map<String, dynamic> toJson() => _$WeaponToJson(this);
   int clipCapacity;
   int currentAmmo;
@@ -78,6 +78,7 @@ class Soldiers {
   });
   factory Soldiers.fromJson(Map<String, dynamic> json) =>
       _$SoldiersFromJson(json);
+  Map<String, dynamic> toJson() => _$SoldiersToJson(this);
   Stats stats;
   String sprite;
   Weapon weapon;

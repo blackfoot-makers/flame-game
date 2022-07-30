@@ -11,10 +11,10 @@ environment:
 dependencies:
   build_runner: ^2.2.0
   cupertino_icons: ^1.0.2
-  json_annotation: ^4.6.0
   flame: 1.2.0
   flutter:
     sdk: flutter
+  json_annotation: ^4.6.0
   json_serializable: ^6.3.1
 
 
