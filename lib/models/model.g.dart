@@ -8,19 +8,19 @@ part of 'model.dart';
 
 Box _$BoxFromJson(Map<String, dynamic> json) => Box(
       strenghRequirement: json['strenghRequirement'] as int,
-      path: json['path'] as String,
+      spritePath: json['spritePath'] as String,
     );
 
 Map<String, dynamic> _$BoxToJson(Box instance) => <String, dynamic>{
       'strenghRequirement': instance.strenghRequirement,
-      'path': instance.path,
+      'spritePath': instance.spritePath,
     };
 
 Weapon _$WeaponFromJson(Map<String, dynamic> json) => Weapon(
       accuracy: json['accuracy'] as int,
       clipCapacity: json['clipCapacity'] as int,
       damage: json['damage'] as int,
-      sprite: json['sprite'] as String,
+      spritePath: json['spritePath'] as String,
       currentAmmo: json['currentAmmo'] as int,
     );
 
@@ -29,7 +29,7 @@ Map<String, dynamic> _$WeaponToJson(Weapon instance) => <String, dynamic>{
       'currentAmmo': instance.currentAmmo,
       'damage': instance.damage,
       'accuracy': instance.accuracy,
-      'sprite': instance.sprite,
+      'spritePath': instance.spritePath,
     };
 
 Stats _$StatsFromJson(Map<String, dynamic> json) => Stats(
@@ -48,9 +48,21 @@ Map<String, dynamic> _$StatsToJson(Stats instance) => <String, dynamic>{
       'armor': instance.armor,
     };
 
+Character _$CharacterFromJson(Map<String, dynamic> json) => Character(
+      stats: Stats.fromJson(json['stats'] as Map<String, dynamic>),
+      spritePath: json['spritePath'] as String,
+      uuid: json['uuid'] as String,
+    );
+
+Map<String, dynamic> _$CharacterToJson(Character instance) => <String, dynamic>{
+      'uuid': instance.uuid,
+      'stats': instance.stats,
+      'spritePath': instance.spritePath,
+    };
+
 Soldiers _$SoldiersFromJson(Map<String, dynamic> json) => Soldiers(
       stats: Stats.fromJson(json['stats'] as Map<String, dynamic>),
-      sprite: json['sprite'] as String,
+      spritePath: json['spritePath'] as String,
       weapon: Weapon.fromJson(json['weapon'] as Map<String, dynamic>),
       ammo: json['ammo'] as int? ?? 0,
       carryBox: json['carryBox'] as bool? ?? false,
@@ -60,22 +72,22 @@ Soldiers _$SoldiersFromJson(Map<String, dynamic> json) => Soldiers(
 Map<String, dynamic> _$SoldiersToJson(Soldiers instance) => <String, dynamic>{
       'uuid': instance.uuid,
       'stats': instance.stats,
-      'sprite': instance.sprite,
+      'spritePath': instance.spritePath,
       'weapon': instance.weapon,
       'carryBox': instance.carryBox,
       'ammo': instance.ammo,
     };
 
 Monster _$MonsterFromJson(Map<String, dynamic> json) => Monster(
+      spritePath: json['spritePath'] as String,
       stats: Stats.fromJson(json['stats'] as Map<String, dynamic>),
-      sprite: json['sprite'] as String,
       uuid: json['uuid'] as String,
     );
 
 Map<String, dynamic> _$MonsterToJson(Monster instance) => <String, dynamic>{
       'uuid': instance.uuid,
       'stats': instance.stats,
-      'sprite': instance.sprite,
+      'spritePath': instance.spritePath,
     };
 
 Game _$GameFromJson(Map<String, dynamic> json) => Game(

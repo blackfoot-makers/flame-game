@@ -6,13 +6,13 @@ part 'model.g.dart';
 class Box {
   Box({
     required this.strenghRequirement,
-    required this.path,
+    required this.spritePath,
   });
   factory Box.fromJson(Map<String, dynamic> json) => _$BoxFromJson(json);
   Map<String, dynamic> toJson() => _$BoxToJson(this);
 
   int strenghRequirement;
-  String path;
+  String spritePath;
 }
 
 @JsonSerializable()
@@ -21,7 +21,7 @@ class Weapon {
     required this.accuracy,
     required this.clipCapacity,
     required this.damage,
-    required this.sprite,
+    required this.spritePath,
     required this.currentAmmo,
   });
   factory Weapon.fromJson(Map<String, dynamic> json) => _$WeaponFromJson(json);
@@ -42,7 +42,7 @@ class Weapon {
   int currentAmmo;
   int damage;
   int accuracy;
-  String sprite;
+  String spritePath;
 }
 
 @JsonSerializable()
@@ -65,45 +65,58 @@ class Stats {
 }
 
 @JsonSerializable()
-class Soldiers {
-  Soldiers({
+class Character {
+  Character({
     required this.stats,
-    required this.sprite,
+    required this.spritePath,
+    required this.uuid,
+  });
+  factory Character.fromJson(Map<String, dynamic> json) =>
+      _$CharacterFromJson(json);
+  Map<String, dynamic> toJson() => _$CharacterToJson(this);
+
+  String uuid;
+  Stats stats;
+  String spritePath;
+}
+
+@JsonSerializable()
+class Soldiers extends Character {
+  Soldiers({
+    required super.stats,
+    required super.spritePath,
     required this.weapon,
-    this.passiv,
+    this.passive,
     this.ammo = 0,
     this.carryBox = false,
-    required this.uuid,
+    required super.uuid,
   });
   factory Soldiers.fromJson(Map<String, dynamic> json) =>
       _$SoldiersFromJson(json);
+  @override
   Map<String, dynamic> toJson() => _$SoldiersToJson(this);
-  String uuid;
-  Stats stats;
-  String sprite;
+
   Weapon weapon;
   bool carryBox;
   int ammo;
   @JsonKey(ignore: true)
-  Function(Game game)? passiv;
+  Function(Game game)? passive;
 }
 
 @JsonSerializable()
-class Monster {
+class Monster extends Character {
   Monster({
-    required this.stats,
-    required this.sprite,
+    required super.spritePath,
+    required super.stats,
+    required super.uuid,
     this.skill,
-    required this.uuid,
   });
   factory Monster.fromJson(Map<String, dynamic> json) =>
       _$MonsterFromJson(json);
+  @override
   Map<String, dynamic> toJson() => _$MonsterToJson(this);
   @JsonKey(ignore: true)
   final Function(Game game)? skill;
-  String uuid;
-  final Stats stats;
-  final String sprite;
 }
 
 @JsonSerializable()
