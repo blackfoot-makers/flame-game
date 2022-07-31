@@ -1,35 +1,32 @@
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flame/components.dart';
 import 'package:flame_game/audio/audio_constants.dart';
-import 'package:flame_game/audio/audio_controller.dart';
 import 'package:flame_game/main_game/constant.dart';
 import 'package:flame_game/main_game/melvyn_plus_plus_game.dart';
 import 'package:flutter/material.dart';
 
 class Player extends PositionComponent with HasGameRef<MelvynPlusPlusGame> {
-  Player(this.joystick);
+  Player(this.joystick, {required this.runningAudioPlayer});
 
   static final Paint _paint = Paint()..color = Colors.white;
   static const double _playerSpeed = 200;
 
   final JoystickComponent joystick;
+  final AudioPlayer runningAudioPlayer;
 
-  AudioPlayer? _audioPlayer;
   bool _isAlreadyRunning = false;
 
   Future<void> _playRunningAudio() async {
     if (!_isAlreadyRunning) {
-      _audioPlayer = await AudioController().loop(
-        kAudioRunningFile,
-        isLongAudio: true,
-      );
+      await runningAudioPlayer
+          .play(AssetSource('$kAudioPath/$kAudioRunningFile'));
       _isAlreadyRunning = true;
     }
   }
 
   Future<void> _stopRunningAudio() async {
-    if (_audioPlayer != null && _isAlreadyRunning) {
-      await _audioPlayer!.stop();
+    if (_isAlreadyRunning) {
+      await runningAudioPlayer.dispose();
       _isAlreadyRunning = false;
     }
   }
@@ -39,11 +36,6 @@ class Player extends PositionComponent with HasGameRef<MelvynPlusPlusGame> {
     position = gameRef.size / 2;
     size = kTitleSize;
     anchor = Anchor.center;
-  }
-
-  @override
-  void render(Canvas canvas) {
-    canvas.drawRect(size.toRect(), _paint);
   }
 
   @override
@@ -59,5 +51,10 @@ class Player extends PositionComponent with HasGameRef<MelvynPlusPlusGame> {
     }
 
     gameRef.camera.followComponent(this);
+  }
+
+  @override
+  void render(Canvas canvas) {
+    canvas.drawRect(size.toRect(), _paint);
   }
 }

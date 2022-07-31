@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame/experimental.dart';
@@ -17,13 +18,26 @@ class MelvynPlusPlusGame extends FlameGame
   late Player player;
   late final JoystickComponent joystick;
 
+  late AudioPlayer playerRunningAudioPlayer;
+
+  Future<void> _initializeAudio({bool debug = false}) async {
+    await AudioController().changeLogLevel(debug: debug);
+    await AudioController().cacheAllFiles();
+
+    AudioController().initializeBackgroundMusic();
+
+    await AudioController()
+        .playBackgroundMusic(kAudioAmbianceFile, volume: 0.2);
+
+    playerRunningAudioPlayer =
+        AudioController().createAudioPlayer(kAudioRunningFile, volume: 0.8);
+  }
+
   @override
   Future<void> onLoad() async {
     await super.onLoad();
 
-    await AudioController().cacheAllFiles();
-    AudioController().initializeBackgroundMusic();
-    AudioController().playBackgroundMusic(kAudioAmbianceFile, volume: 0.2);
+    await _initializeAudio(debug: true);
 
     final TiledComponent tiledMap = await TiledComponent.load(
       'map.tmx',
@@ -39,7 +53,7 @@ class MelvynPlusPlusGame extends FlameGame
       margin: const EdgeInsets.only(left: 40, bottom: 40),
     );
 
-    player = Player(joystick);
+    player = Player(joystick, runningAudioPlayer: playerRunningAudioPlayer);
     unawaited(add(player));
 
     unawaited(add(joystick));
