@@ -27,26 +27,14 @@ class AudioController {
     );
   }
 
-  // TODO(tun43p): Convert to FlameAudio function
-  Future<void> play(
+  Future<AudioPlayer> play(
     String file, {
     bool isLongAudio = false,
     double volume = 1.0,
   }) async {
-    await AudioPlayer(playerId: file).play(AssetSource('audio/$file'));
-
-    // return isLongAudio
-    //     ? await FlameAudio.playLongAudio(file, volume: volume)
-    //     : await FlameAudio.play(file, volume: volume);
-  }
-
-  // TODO(tun43p): Convert to FlameAudio function
-  Future<void> stop(String file) async {
-    await AudioPlayer(playerId: file).stop();
-
-    // return isLongAudio
-    //     ? await FlameAudio.playLongAudio(file, volume: volume)
-    //     : await FlameAudio.play(file, volume: volume);
+    return isLongAudio
+        ? await FlameAudio.playLongAudio(file, volume: volume)
+        : await FlameAudio.play(file, volume: volume);
   }
 
   Future<AudioPlayer> loop(

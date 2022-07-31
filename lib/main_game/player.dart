@@ -1,5 +1,6 @@
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flame/components.dart';
+import 'package:flame_game/audio/audio_constants.dart';
 import 'package:flame_game/audio/audio_controller.dart';
 import 'package:flame_game/main_game/constant.dart';
 import 'package:flame_game/main_game/melvyn_plus_plus_game.dart';
@@ -13,18 +14,22 @@ class Player extends PositionComponent with HasGameRef<MelvynPlusPlusGame> {
 
   final JoystickComponent joystick;
 
+  AudioPlayer? _audioPlayer;
   bool _isAlreadyRunning = false;
 
   Future<void> _playRunningAudio() async {
     if (!_isAlreadyRunning) {
-      await AudioController().play('run.wav');
+      _audioPlayer = await AudioController().loop(
+        kAudioRunningFile,
+        isLongAudio: true,
+      );
       _isAlreadyRunning = true;
     }
   }
 
   Future<void> _stopRunningAudio() async {
-    if (_isAlreadyRunning) {
-      await AudioPlayer(playerId: 'runningPlayer').stop();
+    if (_audioPlayer != null && _isAlreadyRunning) {
+      await _audioPlayer!.stop();
       _isAlreadyRunning = false;
     }
   }
