@@ -3,15 +3,19 @@ import 'package:flame_audio/audio_pool.dart';
 import 'package:flame_audio/flame_audio.dart';
 
 class AudioController {
-  Future<void> cacheAllFiles() async {
+  // For now we have to return an AudioCache because we are caching files with
+  // AudioPlayers, but in the future it would be better to use FlameAudio's
+  // cache system only.
+  static Future<AudioCache> cacheAllFiles() async {
     try {
-      await FlameAudio.audioCache.loadAll(<String>['ambiance.wav', 'run.wav']);
+      await FlameAudio.audioCache.loadAll(<String>['ambiance.wav']);
+      return AudioCache(prefix: 'assets/audio/');
     } catch (error) {
       throw Exception('Error caching the audio files: $error');
     }
   }
 
-  Future<void> changeLogLevel({bool debug = false}) async {
+  static Future<void> changeLogLevel({bool debug = false}) async {
     try {
       await AudioPlayer.global
           .changeLogLevel(debug ? LogLevel.info : LogLevel.error);
@@ -20,7 +24,7 @@ class AudioController {
     }
   }
 
-  void initializeBackgroundMusic() {
+  static void initializeBackgroundMusic() {
     try {
       FlameAudio.bgm.initialize();
     } catch (error) {
@@ -28,7 +32,10 @@ class AudioController {
     }
   }
 
-  Future<void> playBackgroundMusic(String file, {double volume = 1.0}) async {
+  static Future<void> playBackgroundMusic(
+    String file, {
+    double volume = 1.0,
+  }) async {
     try {
       await FlameAudio.bgm.play(file, volume: volume);
     } catch (error) {
@@ -36,7 +43,7 @@ class AudioController {
     }
   }
 
-  void disposeBackgroundMusic() {
+  static void disposeBackgroundMusic() {
     try {
       FlameAudio.bgm.dispose();
     } catch (error) {
@@ -44,8 +51,53 @@ class AudioController {
     }
   }
 
-  // https://docs.flame-engine.org/main/flame_audio/audio_pool.html
-  Future<AudioPool> createPool(String filename) async {
+  static AudioPlayer createAudioPlayer(
+    String file,
+    AudioCache audioCache, {
+    double volume = 1.0,
+    bool isLoop = false,
+  }) {
+    try {
+      return AudioPlayer(playerId: file)
+        ..setVolume(volume)
+        ..setReleaseMode(
+          isLoop ? ReleaseMode.loop : ReleaseMode.release,
+        )
+        ..audioCache = audioCache;
+    } catch (error) {
+      throw Exception('Error creating an AudioPlayer: $error');
+    }
+  }
+
+  // For the moment, we are using the play function of AudioPlayers and not of
+  // FlameAudio, later on, it would be good to use the FlameAudio method to
+  // avoid creating an AudioPlayer.
+  static void play(
+    String file,
+    AudioPlayer audioPlayer, {
+    bool isLongAudio = false,
+  }) {
+    try {
+      audioPlayer.play(
+        AssetSource(file),
+        mode: isLongAudio ? PlayerMode.mediaPlayer : PlayerMode.lowLatency,
+      );
+    } catch (error) {
+      throw Exception('Error playing the audio: $error');
+    }
+  }
+
+  static void stop(AudioPlayer audioPlayer) {
+    try {
+      audioPlayer.stop();
+    } catch (error) {
+      throw Exception('Error stoping the audio: $error');
+    }
+  }
+
+  // The AudioPool is convenient and functional for sfx type sounds, like a
+  // gunshot. https://docs.flame-engine.org/main/flame_audio/audio_pool.html
+  static Future<AudioPool> createPool(String filename) async {
     try {
       return AudioPool.create(
         filename,
@@ -53,44 +105,6 @@ class AudioController {
       );
     } catch (error) {
       throw Exception('Error creating the audio pool: $error');
-    }
-  }
-
-  // TODO(alex): Fix this method
-  Future<AudioPlayer> play(
-    String file, {
-    bool isLongAudio = false,
-    double volume = 1.0,
-  }) async {
-    try {
-      return isLongAudio
-          ? await FlameAudio.playLongAudio(file, volume: volume)
-          : await FlameAudio.play(file, volume: volume);
-    } catch (error) {
-      throw Exception('Error playing the audio: $error');
-    }
-  }
-
-  // TODO(alex): Fix this method
-  Future<AudioPlayer> loop(
-    String file, {
-    bool isLongAudio = false,
-    double volume = 1.0,
-  }) async {
-    try {
-      return isLongAudio
-          ? await FlameAudio.loopLongAudio(file, volume: volume)
-          : await FlameAudio.loop(file, volume: volume);
-    } catch (error) {
-      throw Exception('Error looping the audio: $error');
-    }
-  }
-
-  AudioPlayer createAudioPlayer(String file, {double volume = 1.0}) {
-    try {
-      return AudioPlayer(playerId: file)..setVolume(volume);
-    } catch (error) {
-      throw Exception('Error creating an AudioPlayer: $error');
     }
   }
 }

@@ -21,16 +21,19 @@ class MelvynPlusPlusGame extends FlameGame
   late AudioPlayer playerRunningAudioPlayer;
 
   Future<void> _initializeAudio({bool debug = false}) async {
-    await AudioController().changeLogLevel(debug: debug);
-    await AudioController().cacheAllFiles();
+    await AudioController.changeLogLevel(debug: debug);
+    final AudioCache audioCache = await AudioController.cacheAllFiles();
 
-    AudioController().initializeBackgroundMusic();
+    AudioController.initializeBackgroundMusic();
 
-    await AudioController()
-        .playBackgroundMusic(kAudioAmbianceFile, volume: 0.2);
+    await AudioController.playBackgroundMusic(kAudioAmbianceFile, volume: 0.2);
 
-    playerRunningAudioPlayer =
-        AudioController().createAudioPlayer(kAudioRunningFile, volume: 0.8);
+    playerRunningAudioPlayer = AudioController.createAudioPlayer(
+      kAudioRunningFile,
+      audioCache,
+      volume: 0.8,
+      isLoop: true,
+    );
   }
 
   @override
