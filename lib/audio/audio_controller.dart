@@ -1,15 +1,64 @@
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flame_audio/audio_pool.dart';
 import 'package:flame_audio/flame_audio.dart';
+import 'package:flame_game/audio/audio_constants.dart';
+
+// For the moment, we are using the play function of AudioPlayers and not of
+// FlameAudio, later on, it would be good to use the FlameAudio method to
+// avoid creating an AudioPlayer.
+class Audio {
+  const Audio(this.file, this.audioCache, {this.isLoop = false});
+
+  final String file;
+  final AudioCache audioCache;
+  final bool isLoop;
+
+  AudioPlayer get audioPlayer {
+    return AudioPlayer(playerId: file)
+      ..setReleaseMode(isLoop ? ReleaseMode.loop : ReleaseMode.release)
+      ..audioCache = audioCache;
+  }
+
+  void play() {
+    try {
+      audioPlayer.play(AssetSource(file));
+    } catch (error) {
+      throw Exception('Error playing the audio: $error');
+    }
+  }
+
+  void stop() {
+    try {
+      audioPlayer.stop();
+    } catch (error) {
+      throw Exception('Error stoping the audio: $error');
+    }
+  }
+
+  void dispose() {
+    try {
+      audioPlayer.dispose();
+    } catch (error) {
+      throw Exception('Error disposing the audio: $error');
+    }
+  }
+}
 
 class AudioController {
+  static AudioCache audioCache = AudioCache(prefix: kAudioPath);
+
+  static Audio playerRunningAudio = Audio(
+    kAudioRunningFile,
+    audioCache,
+    isLoop: true,
+  );
+
   // For now we have to return an AudioCache because we are caching files with
   // AudioPlayers, but in the future it would be better to use FlameAudio's
   // cache system only.
-  static Future<AudioCache> cacheAllFiles() async {
+  static Future<void> cacheAllFiles() async {
     try {
-      await FlameAudio.audioCache.loadAll(<String>['ambiance.wav']);
-      return AudioCache(prefix: 'assets/audio/');
+      await FlameAudio.audioCache.loadAll(<String>[kAudioAmbianceFile]);
     } catch (error) {
       throw Exception('Error caching the audio files: $error');
     }
@@ -48,50 +97,6 @@ class AudioController {
       FlameAudio.bgm.dispose();
     } catch (error) {
       throw Exception('Error disposing the background music: $error');
-    }
-  }
-
-  static AudioPlayer createAudioPlayer(
-    String file,
-    AudioCache audioCache, {
-    double volume = 1.0,
-    bool isLoop = false,
-  }) {
-    try {
-      return AudioPlayer(playerId: file)
-        ..setVolume(volume)
-        ..setReleaseMode(
-          isLoop ? ReleaseMode.loop : ReleaseMode.release,
-        )
-        ..audioCache = audioCache;
-    } catch (error) {
-      throw Exception('Error creating an AudioPlayer: $error');
-    }
-  }
-
-  // For the moment, we are using the play function of AudioPlayers and not of
-  // FlameAudio, later on, it would be good to use the FlameAudio method to
-  // avoid creating an AudioPlayer.
-  static void play(
-    String file,
-    AudioPlayer audioPlayer, {
-    bool isLongAudio = false,
-  }) {
-    try {
-      audioPlayer.play(
-        AssetSource(file),
-        mode: isLongAudio ? PlayerMode.mediaPlayer : PlayerMode.lowLatency,
-      );
-    } catch (error) {
-      throw Exception('Error playing the audio: $error');
-    }
-  }
-
-  static void stop(AudioPlayer audioPlayer) {
-    try {
-      audioPlayer.stop();
-    } catch (error) {
-      throw Exception('Error stoping the audio: $error');
     }
   }
 
