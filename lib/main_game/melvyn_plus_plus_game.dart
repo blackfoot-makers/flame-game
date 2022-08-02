@@ -11,6 +11,7 @@ import 'package:flame_game/main_game/constant.dart';
 import 'package:flame_game/main_game/player.dart';
 import 'package:flame_tiled/flame_tiled.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class MelvynPlusPlusGame extends FlameGame
     with PanDetector, HasTappableComponents, HasDraggables {
@@ -28,7 +29,7 @@ class MelvynPlusPlusGame extends FlameGame
   Future<void> onLoad() async {
     await super.onLoad();
 
-    await _initializeAudio(debug: true);
+    await _initializeAudio(debug: dotenv.env['FLUTTER_ENV'] == "dev");
 
     final TiledComponent tiledMap = await TiledComponent.load(
       'map.tmx',
