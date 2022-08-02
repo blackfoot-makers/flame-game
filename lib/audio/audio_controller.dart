@@ -9,11 +9,17 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 // FlameAudio, later on, it would be good to use the FlameAudio method to
 // avoid creating an AudioPlayer.
 class AudioInstance {
-  AudioInstance(this.file, this.audioCache, {this.isLoop = false});
+  AudioInstance(
+    this.file, {
+    required this.audioCache,
+    this.releaseMode = ReleaseMode.loop,
+    this.volume = 1.0,
+  });
 
   final String file;
   final AudioCache audioCache;
-  final bool isLoop;
+  final ReleaseMode releaseMode;
+  final double volume;
 
   late AudioPlayer _audioPlayer;
 
@@ -23,13 +29,9 @@ class AudioInstance {
     try {
       final AudioPlayer player = AudioPlayer(playerId: file);
       player.audioCache = audioCache;
-
-      await player.setReleaseMode(
-        isLoop ? ReleaseMode.loop : ReleaseMode.release,
-      );
-
+      await player.setVolume(volume);
+      await player.setReleaseMode(releaseMode);
       _audioPlayer = player;
-
       return this;
     } catch (error) {
       throw Exception('Error initializing the audio instance: $error');
@@ -62,14 +64,18 @@ class AudioInstance {
 }
 
 class AudioController {
-  static late AudioCache audioLoopsCache;
+  static late AudioCache loopsAudioCache;
+  static late AudioCache sfxAudioCache;
 
-  static late AudioInstance playerRunningAudio;
+  static late AudioInstance playerRunningAudioInstance;
+
+  static late AudioPool playerGunshotAudioPool;
 
   static Future<void> _cacheAllFiles() async {
     try {
-      await FlameAudio.audioCache.loadAll(<String>[kAudioAmbianceFile]);
-      audioLoopsCache = AudioCache(prefix: kAudioLoopsPath);
+      await FlameAudio.audioCache.load(kAudioAmbianceFile);
+      loopsAudioCache = AudioCache(prefix: kAudioLoopsPath);
+      sfxAudioCache = AudioCache(prefix: kAudioSFXPath);
     } catch (error) {
       throw Exception('Error caching the audio files: $error');
     }
@@ -92,15 +98,30 @@ class AudioController {
     }
   }
 
+  // The AudioInstance is functional for looping type, like a walking loop.
   static Future<void> _initializeAudioInstances() async {
     try {
-      playerRunningAudio = await AudioInstance(
+      playerRunningAudioInstance = await AudioInstance(
         kAudioRunningLoopFile,
-        audioLoopsCache,
-        isLoop: true,
+        audioCache: loopsAudioCache,
+        volume: 2.0,
       ).initialize();
     } catch (error) {
       throw Exception('Error initializing the audio instances: $error');
+    }
+  }
+
+  // The AudioPool is convenient and functional for sfx type sounds, like a
+  // gunshot. https://docs.flame-engine.org/main/flame_audio/audio_pool.html
+  static Future<void> _initializeAudioPools() async {
+    try {
+      playerGunshotAudioPool = await AudioPool.create(
+        kAudioGunshotSFXFile,
+        audioCache: sfxAudioCache,
+        maxPlayers: kMaxNumberOfPlayers,
+      );
+    } catch (error) {
+      throw Exception('Error initializing the audio pools: $error');
     }
   }
 
@@ -110,6 +131,7 @@ class AudioController {
       await _changeLogLevel(debug: dotenv.env['FLUTTER_ENV'] == 'dev');
       _initializeBackgroundMusic();
       await _initializeAudioInstances();
+      await _initializeAudioPools();
     } catch (error) {
       throw Exception('Error initializing the audio controller: $error');
     }
@@ -131,22 +153,6 @@ class AudioController {
       FlameAudio.bgm.dispose();
     } catch (error) {
       throw Exception('Error disposing the background music: $error');
-    }
-  }
-
-  // The AudioPool is convenient and functional for sfx type sounds, like a
-  // gunshot. https://docs.flame-engine.org/main/flame_audio/audio_pool.html
-  static Future<AudioPool> createPool(
-    String filename, {
-    int maxPlayers = kMaxNumberOfPlayers,
-  }) async {
-    try {
-      return AudioPool.create(
-        filename,
-        maxPlayers: maxPlayers,
-      );
-    } catch (error) {
-      throw Exception('Error creating the audio pool: $error');
     }
   }
 }
