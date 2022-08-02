@@ -28,6 +28,8 @@ flutter:
 
   assets:
     - assets/audio/
+    - assets/audio/loops/
+    - assets/audio/sfx/
     - assets/images/
     - assets/tiles/
     - .env

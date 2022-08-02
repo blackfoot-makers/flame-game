@@ -19,7 +19,7 @@ class AudioInstance {
 
   AudioPlayer get audioPlayer => _audioPlayer;
 
-  Future<void> initialize() async {
+  Future<AudioInstance> initialize() async {
     try {
       final AudioPlayer player = AudioPlayer(playerId: file);
       player.audioCache = audioCache;
@@ -29,6 +29,8 @@ class AudioInstance {
       );
 
       _audioPlayer = player;
+
+      return this;
     } catch (error) {
       throw Exception('Error initializing the audio instance: $error');
     }
@@ -60,14 +62,14 @@ class AudioInstance {
 }
 
 class AudioController {
-  static late AudioCache audioCache;
+  static late AudioCache audioLoopsCache;
 
   static late AudioInstance playerRunningAudio;
 
   static Future<void> _cacheAllFiles() async {
     try {
       await FlameAudio.audioCache.loadAll(<String>[kAudioAmbianceFile]);
-      audioCache = AudioCache(prefix: kAudioPath);
+      audioLoopsCache = AudioCache(prefix: kAudioLoopsPath);
     } catch (error) {
       throw Exception('Error caching the audio files: $error');
     }
@@ -92,9 +94,11 @@ class AudioController {
 
   static Future<void> _initializeAudioInstances() async {
     try {
-      playerRunningAudio =
-          AudioInstance(kAudioRunningFile, audioCache, isLoop: true);
-      await playerRunningAudio.initialize();
+      playerRunningAudio = await AudioInstance(
+        kAudioRunningLoopFile,
+        audioLoopsCache,
+        isLoop: true,
+      ).initialize();
     } catch (error) {
       throw Exception('Error initializing the audio instances: $error');
     }
