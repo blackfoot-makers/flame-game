@@ -8,8 +8,8 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 // For the moment, we are using the play function of AudioPlayers and not of
 // FlameAudio, later on, it would be good to use the FlameAudio method to
 // avoid creating an AudioPlayer.
-class AudioInstance {
-  AudioInstance(this.file, this.audioCache, {this.isLoop = false});
+class _AudioInstance {
+  _AudioInstance(this.file, this.audioCache, {this.isLoop = false});
 
   final String file;
   final AudioCache audioCache;
@@ -19,7 +19,7 @@ class AudioInstance {
 
   AudioPlayer get audioPlayer => _audioPlayer;
 
-  Future<AudioInstance> initialize() async {
+  Future<_AudioInstance> initialize() async {
     try {
       final AudioPlayer player = AudioPlayer(playerId: file);
       player.audioCache = audioCache;
@@ -64,7 +64,8 @@ class AudioInstance {
 class AudioController {
   static late AudioCache audioLoopsCache;
 
-  static late AudioInstance playerRunningAudio;
+  // ignore: library_private_types_in_public_api
+  static late _AudioInstance playerRunningAudio;
 
   static Future<void> _cacheAllFiles() async {
     try {
@@ -94,7 +95,7 @@ class AudioController {
 
   static Future<void> _initializeAudioInstances() async {
     try {
-      playerRunningAudio = await AudioInstance(
+      playerRunningAudio = await _AudioInstance(
         kAudioRunningLoopFile,
         audioLoopsCache,
         isLoop: true,
