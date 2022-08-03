@@ -16,14 +16,14 @@ class Player extends PositionComponent with HasGameRef<MelvynPlusPlusGame> {
 
   void _playRunningAudio() {
     if (!_isAlreadyRunning) {
-      AudioController.playerRunningAudio.play();
+      AudioController.playerRunningAudioInstance.play();
       _isAlreadyRunning = true;
     }
   }
 
   void _stopRunningAudio() {
     if (_isAlreadyRunning) {
-      AudioController.playerRunningAudio.stop();
+      AudioController.playerRunningAudioInstance.stop();
       _isAlreadyRunning = false;
     }
   }

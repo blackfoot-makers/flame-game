@@ -1,7 +1,8 @@
-const String kAudioPath = 'assets/audio';
-const String kAudioLoopsPath = '$kAudioPath/loops/';
-const String kAudioSFXPath = '$kAudioPath/sfx/';
+const String kAudioLoopsPath = 'assets/audio/loops/';
+const String kAudioSFXPath = 'assets/audio/sfx/';
 
 const String kAudioAmbianceFile = 'ambiance.wav';
 
 const String kAudioRunningLoopFile = 'run.wav';
+
+const String kAudioGunshotSFXFile = 'gunshot.wav';
