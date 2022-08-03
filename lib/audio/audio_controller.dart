@@ -1,3 +1,5 @@
+// ignore_for_file: library_private_types_in_public_api, unused_element
+
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flame_audio/audio_pool.dart';
 import 'package:flame_audio/flame_audio.dart';
@@ -8,8 +10,8 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 // For the moment, we are using the play function of AudioPlayers and not of
 // FlameAudio, later on, it would be good to use the FlameAudio method to
 // avoid creating an AudioPlayer.
-class AudioInstance {
-  AudioInstance(
+class _AudioInstance {
+  _AudioInstance(
     this.file, {
     required this.audioCache,
     this.releaseMode = ReleaseMode.loop,
@@ -25,7 +27,7 @@ class AudioInstance {
 
   AudioPlayer get audioPlayer => _audioPlayer;
 
-  Future<AudioInstance> initialize() async {
+  Future<_AudioInstance> initialize() async {
     try {
       final AudioPlayer player = AudioPlayer(playerId: file);
       player.audioCache = audioCache;
@@ -67,7 +69,7 @@ class AudioController {
   static late AudioCache loopsAudioCache;
   static late AudioCache sfxAudioCache;
 
-  static late AudioInstance playerRunningAudioInstance;
+  static late _AudioInstance playerRunningAudioInstance;
 
   static late AudioPool playerGunshotAudioPool;
 
@@ -101,10 +103,9 @@ class AudioController {
   // The AudioInstance is functional for looping type, like a walking loop.
   static Future<void> _initializeAudioInstances() async {
     try {
-      playerRunningAudioInstance = await AudioInstance(
+      playerRunningAudioInstance = await _AudioInstance(
         kAudioRunningLoopFile,
         audioCache: loopsAudioCache,
-        volume: 2.0,
       ).initialize();
     } catch (error) {
       throw Exception('Error initializing the audio instances: $error');
