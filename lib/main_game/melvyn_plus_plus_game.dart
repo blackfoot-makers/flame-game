@@ -7,11 +7,18 @@ import 'package:flame/game.dart';
 import 'package:flame/palette.dart';
 import 'package:flame_game/main_game/constant.dart';
 import 'package:flame_game/main_game/player.dart';
+import 'package:flame_game/wall/wall.dart';
 import 'package:flame_tiled/flame_tiled.dart';
 import 'package:flutter/rendering.dart';
+// ignore: depend_on_referenced_packages
+import 'package:tiled/tiled.dart';
 
 class MelvynPlusPlusGame extends FlameGame
-    with PanDetector, HasTappableComponents, HasDraggables {
+    with
+        PanDetector,
+        HasTappableComponents,
+        HasDraggables,
+        HasCollisionDetection {
   late Player player;
   late final JoystickComponent joystick;
 
@@ -24,6 +31,7 @@ class MelvynPlusPlusGame extends FlameGame
     );
     unawaited(add(tiledMap));
 
+    _loadWall(tiledMap);
     final Paint knobPaint = BasicPalette.white.withAlpha(200).paint();
     final Paint backgroundPaint = BasicPalette.white.withAlpha(100).paint();
     joystick = JoystickComponent(
@@ -36,5 +44,21 @@ class MelvynPlusPlusGame extends FlameGame
     unawaited(add(player));
 
     unawaited(add(joystick));
+  }
+
+  void _loadWall(TiledComponent tiledMap) {
+    final ObjectGroup? walls =
+        tiledMap.tileMap.getLayer<ObjectGroup>(kWallsLayer);
+
+    for (final TiledObject wall in walls!.objects) {
+      unawaited(
+        add(
+          Wall(
+            size: Vector2(wall.width, wall.height),
+            position: Vector2(wall.x, wall.y),
+          ),
+        ),
+      );
+    }
   }
 }
