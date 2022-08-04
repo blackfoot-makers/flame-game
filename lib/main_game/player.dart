@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
+import 'package:flame_game/audio/audio_controller.dart';
 import 'package:flame_game/main_game/constant.dart';
 import 'package:flame_game/main_game/melvyn_plus_plus_game.dart';
 import 'package:flame_game/wall/wall.dart';
@@ -13,9 +14,26 @@ class Player extends PositionComponent
 
   static final Paint _paint = Paint()..color = Colors.white;
   static const double _playerSpeed = 200;
+
   final JoystickComponent joystick;
   bool _isCollided = false;
   JoystickDirection _lastDirection = JoystickDirection.idle;
+
+  bool _isAlreadyRunning = false;
+
+  void _playRunningAudio() {
+    if (!_isAlreadyRunning) {
+      AudioController.playerRunningAudioInstance.play();
+      _isAlreadyRunning = true;
+    }
+  }
+
+  void _stopRunningAudio() {
+    if (_isAlreadyRunning) {
+      AudioController.playerRunningAudioInstance.stop();
+      _isAlreadyRunning = false;
+    }
+  }
 
   @override
   Future<void> onLoad() async {
@@ -23,7 +41,6 @@ class Player extends PositionComponent
     position = gameRef.size / 2;
     size = kTitleSize;
     anchor = Anchor.center;
-    unawaited(add(RectangleHitbox()));
   }
 
   @override
@@ -39,6 +56,9 @@ class Player extends PositionComponent
         position.add(joystick.relativeDelta * _playerSpeed * dt);
       }
       angle = joystick.delta.screenAngle();
+      _playRunningAudio();
+    } else {
+      _stopRunningAudio();
     }
 
     gameRef.camera.followComponent(this);
