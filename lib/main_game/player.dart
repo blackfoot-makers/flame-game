@@ -28,6 +28,10 @@ class Player extends PositionComponent with HasGameRef<MelvynPlusPlusGame> {
     }
   }
 
+  void shoot() {
+    print('shooting');
+  }
+
   @override
   Future<void> onLoad() async {
     position = gameRef.size / 2;
