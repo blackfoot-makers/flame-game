@@ -38,5 +38,6 @@ class MelvynPlusPlusGame extends FlameGame
     unawaited(add(player));
     unawaited(add(joystick));
     unawaited(add(buttons.shootButton));
+    unawaited(add(buttons.actionButton));
   }
 }
