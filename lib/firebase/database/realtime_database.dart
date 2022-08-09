@@ -1,15 +1,21 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flame_game/firebase/database/active_game_database.dart';
-import 'package:flame_game/main.dart';
+import 'package:get_it/get_it.dart';
 
 class RealtimeDatabase {
-  RealtimeDatabase();
+  RealtimeDatabase(FirebaseApp app) {
+    _databaseInstance = FirebaseDatabase.instanceFor(
+      app: app,
+    );
+  }
 
-  final DatabaseReference _mainDataBaseRef = FirebaseDatabase.instance.ref(
-    "https://melvyn-game-plus-plus-default-rtdb.europe-west1.firebasedatabase.app/",
-  );
-  DatabaseReference get mainDataBaseRef => _mainDataBaseRef;
+  late final FirebaseDatabase _databaseInstance;
+  FirebaseDatabase get databaseInstance => _databaseInstance;
 
-  void createGame() =>
-      getIt.registerSingleton<ActiveGameDatabase>(ActiveGameDatabase());
+  Future<void> createGame() async {
+    final ActiveGameDatabase newGame = ActiveGameDatabase();
+    GetIt.instance.registerSingleton<ActiveGameDatabase>(newGame);
+    await newGame.initdatabase();
+  }
 }

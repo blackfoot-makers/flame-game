@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "808769087237",
+    "firebase_url": "https://melvyn-game-plus-plus-default-rtdb.europe-west1.firebasedatabase.app",
     "project_id": "melvyn-game-plus-plus",
     "storage_bucket": "melvyn-game-plus-plus.appspot.com"
   },
@@ -29,6 +30,13 @@
             {
               "client_id": "808769087237-inkhdh0pedple7fh2avmppdqpm10fltl.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "808769087237-i2llktj7r6ko11lr7o3e5fu8lm46hf4j.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.flameGame"
+              }
             }
           ]
         }

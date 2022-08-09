@@ -52,6 +52,7 @@ class DefaultFirebaseOptions {
     messagingSenderId: '808769087237',
     projectId: 'melvyn-game-plus-plus',
     authDomain: 'melvyn-game-plus-plus.firebaseapp.com',
+    databaseURL: 'https://melvyn-game-plus-plus-default-rtdb.europe-west1.firebasedatabase.app',
     storageBucket: 'melvyn-game-plus-plus.appspot.com',
   );
 
@@ -60,6 +61,7 @@ class DefaultFirebaseOptions {
     appId: '1:808769087237:android:0cb024085f2a9c76c7f96c',
     messagingSenderId: '808769087237',
     projectId: 'melvyn-game-plus-plus',
+    databaseURL: 'https://melvyn-game-plus-plus-default-rtdb.europe-west1.firebasedatabase.app',
     storageBucket: 'melvyn-game-plus-plus.appspot.com',
   );
 
@@ -68,6 +70,7 @@ class DefaultFirebaseOptions {
     appId: '1:808769087237:ios:4fa810d362b676e2c7f96c',
     messagingSenderId: '808769087237',
     projectId: 'melvyn-game-plus-plus',
+    databaseURL: 'https://melvyn-game-plus-plus-default-rtdb.europe-west1.firebasedatabase.app',
     storageBucket: 'melvyn-game-plus-plus.appspot.com',
     iosClientId: '808769087237-i2llktj7r6ko11lr7o3e5fu8lm46hf4j.apps.googleusercontent.com',
     iosBundleId: 'com.example.flameGame',
