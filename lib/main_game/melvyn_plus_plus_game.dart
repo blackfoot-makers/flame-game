@@ -10,6 +10,7 @@ import 'package:flame_game/main_game/hud_menu/action_buttons.dart';
 import 'package:flame_game/main_game/hud_menu/joystick.dart';
 import 'package:flame_game/main_game/player.dart';
 import 'package:flame_tiled/flame_tiled.dart';
+import 'package:flutter/material.dart';
 
 class MelvynPlusPlusGame extends FlameGame
     with PanDetector, HasTappables, HasDraggables {
@@ -18,26 +19,35 @@ class MelvynPlusPlusGame extends FlameGame
 
   @override
   Future<void> onLoad() async {
-    await super.onLoad();
+    try {
+      await super.onLoad();
 
-    await AudioController.initialize();
-    await AudioController.playBackgroundMusic(kAudioAmbianceFile);
+      await AudioController.initialize();
+      await AudioController.playBackgroundMusic(kAudioAmbianceFile);
 
-    final TiledComponent tiledMap = await TiledComponent.load(
-      'map.tmx',
-      kTitleSize,
-    );
-    unawaited(add(tiledMap));
+      final TiledComponent tiledMap = await TiledComponent.load(
+        'map.tmx',
+        kTitleSize,
+      );
 
-    joystick = Joystick();
+      joystick = Joystick();
 
-    player = Player(joystick);
-    final ActionButtons buttons = ActionButtons(player: player);
-    await buttons.initialize();
+      player = Player(joystick);
+      final ActionButtons buttons = ActionButtons(player: player);
+      await buttons.initialize();
 
-    unawaited(add(player));
-    unawaited(add(joystick));
-    unawaited(add(buttons.shootButton));
-    unawaited(add(buttons.actionButton));
+      await Future.wait(
+        <Future<void>?>[
+          add(tiledMap),
+          add(player),
+          add(joystick),
+          add(buttons.shootButton),
+          add(buttons.actionButton),
+        ] as Iterable<Future<dynamic>>,
+      );
+    } catch (e) {
+      // TODO(Nico): Log error in crashlytics
+      debugPrint('error $e');
+    }
   }
 }
