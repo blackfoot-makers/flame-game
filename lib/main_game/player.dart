@@ -28,6 +28,16 @@ class Player extends PositionComponent with HasGameRef<MelvynPlusPlusGame> {
     }
   }
 
+  void shoot() {
+    AudioController.playerGunshotAudioPool.start();
+  }
+
+  // TODO(ALL): Implement action
+  void carryBox() {
+    // ignore: avoid_print
+    print('Carry box');
+  }
+
   @override
   Future<void> onLoad() async {
     position = gameRef.size / 2;
