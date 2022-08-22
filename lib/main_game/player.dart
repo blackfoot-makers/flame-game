@@ -13,11 +13,13 @@ class Player extends BodyComponent<Forge2DGame> {
   Player({
     required this.position,
     required this.size,
+    required this.joystick,
   });
 
-  static const double _playerSpeed = 200;
+  static const double _playerSpeed = 60.0;
   final Vector2 position;
   final Vector2 size;
+  JoystickComponent joystick;
 
   @override
   Future<void> onLoad() async {
@@ -53,10 +55,26 @@ class Player extends BodyComponent<Forge2DGame> {
     final BodyDef bodyDef = BodyDef(
       position: position,
       type: BodyType.dynamic,
-      active: false,
     );
 
     return world.createBody(bodyDef)..createFixture(fixtureDef);
+  }
+
+  @override
+  void update(double dt) {
+    super.update(dt);
+    // Increment the current position of player by (speed * delta time) along moveDirection.
+    // Delta time is the time elapsed since last update. For devices with higher frame rates, delta time
+    // will be smaller and for devices with lower frame rates, it will be larger. Multiplying speed with
+    // delta time ensure that player speed remains same irrespective of the device FPS.
+    if (joystick.direction != JoystickDirection.idle) {
+      // position.add(joystick.relativeDelta * _playerSpeed * dt);
+      body.linearVelocity = joystick.relativeDelta * _playerSpeed;
+    } else {
+      body.linearVelocity = Vector2(0, 0);
+    }
+
+    camera.followBodyComponent(this);
   }
 }
 
@@ -135,25 +153,25 @@ class Player extends BodyComponent<Forge2DGame> {
 //     //   return lowerDirection.contains(lowerLastDirection);
 //   }
 
-//   @override
-//   void update(double dt) {
-//     super.update(dt);
-//     if (joystick.direction != JoystickDirection.idle) {
-//       // print(x);
-//       print(joystick.relativeDelta.y * _playerSpeed * dt);
-//       if (!_isCollided) {
-//         position.add(joystick.relativeDelta * _playerSpeed * dt);
-//       } else {
-//         mooveInRightDirection(joystick.direction, dt);
-//       }
-//       angle = joystick.delta.screenAngle();
-//       _playRunningAudio();
-//     } else {
-//       _stopRunningAudio();
-//     }
+  // @override
+  // void update(double dt) {
+  //   super.update(dt);
+  //   if (joystick.direction != JoystickDirection.idle) {
+  //     // print(x);
+  //     print(joystick.relativeDelta.y * _playerSpeed * dt);
+  //     if (!_isCollided) {
+  //       position.add(joystick.relativeDelta * _playerSpeed * dt);
+  //     } else {
+  //       mooveInRightDirection(joystick.direction, dt);
+  //     }
+  //     angle = joystick.delta.screenAngle();
+  //     _playRunningAudio();
+  //   } else {
+  //     _stopRunningAudio();
+  //   }
 
-//     gameRef.camera.followComponent(this);
-//   }
+  //   gameRef.camera.followComponent(this);
+  // }
 
 //   @override
 //   void onCollision(Set<Vector2> intersectionPoints, PositionComponent other) {

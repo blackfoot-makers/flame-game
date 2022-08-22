@@ -19,13 +19,23 @@ import 'package:tiled/tiled.dart';
 /// The [MelvynPlusPlusGame] is the main game class.
 ///
 /// It is responsible for creating the game and initializing the components.
-class MelvynPlusPlusGame extends Forge2DGame {
+class MelvynPlusPlusGame extends Forge2DGame with HasDraggables {
+  MelvynPlusPlusGame({
+    super.gravity,
+  });
+
   late Player player;
   late final JoystickComponent joystick;
 
   @override
   Future<void> onLoad() async {
     await super.onLoad();
+
+    final TiledComponent tiledMap = await TiledComponent.load(
+      'map.tmx',
+      kTitleSize,
+    );
+    unawaited(add(tiledMap));
 
     final Paint knobPaint = BasicPalette.white.withAlpha(200).paint();
     final Paint backgroundPaint = BasicPalette.white.withAlpha(100).paint();
@@ -34,10 +44,12 @@ class MelvynPlusPlusGame extends Forge2DGame {
       background: CircleComponent(radius: 50, paint: backgroundPaint),
       margin: const EdgeInsets.only(left: 40, bottom: 40),
     );
+    unawaited(add(joystick));
 
     player = Player(
       position: Vector2(20, 20),
-      size: Vector2(4, 4),
+      size: Vector2(16, 16),
+      joystick: joystick,
     );
     unawaited(add(player));
   }
