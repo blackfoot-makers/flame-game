@@ -21,6 +21,16 @@ class Player extends BodyComponent<Forge2DGame> {
   final Vector2 size;
   JoystickComponent joystick;
 
+  void shoot() {
+    AudioController.playerGunshotAudioPool.start();
+  }
+
+  // TODO(ALL): Implement action
+  void carryBox() {
+    // ignore: avoid_print
+    print('Carry box');
+  }
+
   @override
   Future<void> onLoad() async {
     await super.onLoad();
