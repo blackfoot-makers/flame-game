@@ -9,14 +9,15 @@ import 'package:flame_game/main_game/melvyn_plus_plus_game.dart';
 import 'package:flame_game/wall/wall.dart';
 import 'package:flutter/material.dart';
 
-class Player extends BodyComponent<Forge2DGame> {
+class Player extends BodyComponent<Forge2DGame>
+    with CollisionCallbacks, ContactCallbacks {
   Player({
     required this.position,
     required this.size,
     required this.joystick,
   });
 
-  static const double _playerSpeed = 60.0;
+  static const double _playerSpeed = 80.0;
   final Vector2 position;
   final Vector2 size;
   JoystickComponent joystick;
@@ -57,6 +58,11 @@ class Player extends BodyComponent<Forge2DGame> {
     ];
     shape.set(vertices);
 
+    // Vector2(-2, -2),
+    //   Vector2(2, -2),
+    //   Vector2(2, 2),
+    //   Vector2(-2, 2)
+
     final FixtureDef fixtureDef = FixtureDef(
       shape,
       userData: this, // To be able to determine object in collision
@@ -86,35 +92,55 @@ class Player extends BodyComponent<Forge2DGame> {
 
     camera.followBodyComponent(this);
   }
+
+  @override
+  void onCollision(Set<Vector2> intersectionPoints, PositionComponent other) {
+    super.onCollision(intersectionPoints, other);
+
+    debugPrint('ON COLLISION');
+    if (other is Wall) {
+      body.linearVelocity = Vector2(0, 0);
+    }
+  }
+
+  @override
+  void beginContact(Object other, Contact contact) {
+    super.beginContact(other, contact);
+
+    debugPrint('Begin contact');
+    if (other is Wall) {
+      body.linearVelocity = Vector2(0, 0);
+    }
+  }
 }
 
 // class Player extends PositionComponent
 //     with HasGameRef<MelvynPlusPlusGame>, Hitbox, Collidable {
 //   Player(this.joystick);
-
+//
 //   static final Paint _paint = Paint()..color = Colors.white;
 //   static const double _playerSpeed = 200;
-
+//
 //   final JoystickComponent joystick;
 //   bool _isCollided = false;
 //   JoystickDirection _lastDirection = JoystickDirection.idle;
-
+//
 //   bool _isAlreadyRunning = false;
-
+//
 //   void _playRunningAudio() {
 //     if (!_isAlreadyRunning) {
 //       AudioController.playerRunningAudioInstance.play();
 //       _isAlreadyRunning = true;
 //     }
 //   }
-
+//
 //   void _stopRunningAudio() {
 //     if (_isAlreadyRunning) {
 //       AudioController.playerRunningAudioInstance.stop();
 //       _isAlreadyRunning = false;
 //     }
 //   }
-
+//
   // @override
   // Future<void> onLoad() async {
   //   await super.onLoad();
@@ -123,12 +149,12 @@ class Player extends BodyComponent<Forge2DGame> {
   //   anchor = Anchor.center;
   //   unawaited(add(RectangleHitbox()));
   // }
-
+//
 //   @override
 //   void render(Canvas canvas) {
 //     canvas.drawRect(size.toRect(), _paint);
 //   }
-
+//
 //   void mooveInRightDirection(JoystickDirection direction, double dt) {
 //     print('lastDirection: $_lastDirection');
 //     print('isCollided: $_isCollided');
@@ -136,17 +162,17 @@ class Player extends BodyComponent<Forge2DGame> {
 //         direction == JoystickDirection.upRight) {
 //       position.x += joystick.relativeDelta.x * _playerSpeed * dt;
 //     }
-
+//
 //     if (_lastDirection == JoystickDirection.up &&
 //         direction == JoystickDirection.upLeft) {
 //       position.x += joystick.relativeDelta.x * _playerSpeed * dt;
 //     }
-
+//
 //     if (_lastDirection == JoystickDirection.left &&
 //         direction == JoystickDirection.upLeft) {
 //       position.y += joystick.relativeDelta.y * _playerSpeed * dt;
 //     }
-
+//
 //     if (_lastDirection == JoystickDirection.left &&
 //         direction == JoystickDirection.downLeft) {
 //       position.y += joystick.relativeDelta.y * _playerSpeed * dt;
@@ -159,10 +185,10 @@ class Player extends BodyComponent<Forge2DGame> {
 //     //   // print(_splitDirection);
 //     //   final String lowerDirection = direction.name.toLowerCase();
 //     //   final String lowerLastDirection = _lastDirection.name.toLowerCase();
-
+//
 //     //   return lowerDirection.contains(lowerLastDirection);
 //   }
-
+//
   // @override
   // void update(double dt) {
   //   super.update(dt);
@@ -179,10 +205,10 @@ class Player extends BodyComponent<Forge2DGame> {
   //   } else {
   //     _stopRunningAudio();
   //   }
-
+//
   //   gameRef.camera.followComponent(this);
   // }
-
+//
 //   @override
 //   void onCollision(Set<Vector2> intersectionPoints, PositionComponent other) {
 //     super.onCollision(intersectionPoints, other);
@@ -191,7 +217,7 @@ class Player extends BodyComponent<Forge2DGame> {
 //       _lastDirection = joystick.direction;
 //     }
 //   }
-  
+//
 //   @override
 //   void onCollisionEnd(PositionComponent other) {
 //     super.onCollisionEnd(other);

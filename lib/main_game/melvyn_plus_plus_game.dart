@@ -23,10 +23,28 @@ import 'package:tiled/tiled.dart';
 class MelvynPlusPlusGame extends Forge2DGame with HasDraggables, HasTappables {
   MelvynPlusPlusGame({
     super.gravity,
-  });
+  }) : super(
+          zoom: 2.0,
+        );
 
   late Player player;
   late final JoystickComponent joystick;
+
+  void _loadWall(TiledComponent tiledMap) {
+    final ObjectGroup? walls =
+        tiledMap.tileMap.getLayer<ObjectGroup>(kWallsLayer);
+
+    for (final TiledObject wall in walls!.objects) {
+      unawaited(
+        add(
+          Wall(
+            size: Vector2(wall.width, wall.height),
+            position: Vector2(wall.x, wall.y),
+          ),
+        ),
+      );
+    }
+  }
 
   @override
   Future<void> onLoad() async {
@@ -40,26 +58,34 @@ class MelvynPlusPlusGame extends Forge2DGame with HasDraggables, HasTappables {
         'map.tmx',
         kTitleSize,
       );
+      _loadWall(tiledMap);
 
       joystick = Joystick();
 
       player = Player(
         position: Vector2(20, 20),
-        size: Vector2(16, 16),
+        size: Vector2(32, 32),
         joystick: joystick,
       );
+
       final ActionButtons buttons = ActionButtons(player: player);
       await buttons.initialize();
 
-      await Future.wait(
-        <Future<void>?>[
-          add(tiledMap),
-          add(player),
-          add(joystick),
-          add(buttons.shootButton),
-          add(buttons.actionButton),
-        ] as Iterable<Future<dynamic>>,
-      );
+      add(tiledMap);
+      add(player);
+      add(joystick);
+      add(buttons.shootButton);
+      add(buttons.actionButton);
+
+      // await Future.wait(
+      //   <Future<dynamic>?>[
+      //     add(tiledMap),
+      //     add(player)!,
+      //     add(joystick)!,
+      //     add(buttons.shootButton),
+      //     add(buttons.actionButton),
+      //   ] as Iterable<Future<dynamic>>,
+      // );
     } catch (e) {
       // TODO(Nico): Log error in crashlytics
       debugPrint('error $e');
@@ -104,19 +130,19 @@ class MelvynPlusPlusGame extends Forge2DGame with HasDraggables, HasTappables {
 //     unawaited(add(joystick));
 //   }
 
-//   void _loadWall(TiledComponent tiledMap) {
-//     final ObjectGroup? walls =
-//         tiledMap.tileMap.getLayer<ObjectGroup>(kWallsLayer);
+  // void _loadWall(TiledComponent tiledMap) {
+  //   final ObjectGroup? walls =
+  //       tiledMap.tileMap.getLayer<ObjectGroup>(kWallsLayer);
 
-//     for (final TiledObject wall in walls!.objects) {
-//       unawaited(
-//         add(
-//           Wall(
-//             size: Vector2(wall.width, wall.height),
-//             position: Vector2(wall.x, wall.y),
-//           ),
-//         ),
-//       );
-//     }
-//   }
+  //   for (final TiledObject wall in walls!.objects) {
+  //     unawaited(
+  //       add(
+  //         Wall(
+  //           size: Vector2(wall.width, wall.height),
+  //           position: Vector2(wall.x, wall.y),
+  //         ),
+  //       ),
+  //     );
+  //   }
+  // }
 // }
