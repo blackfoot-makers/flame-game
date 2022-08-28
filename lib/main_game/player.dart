@@ -4,8 +4,6 @@ import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';
 import 'package:flame_game/audio/audio_controller.dart';
-import 'package:flame_game/main_game/constant.dart';
-import 'package:flame_game/main_game/melvyn_plus_plus_game.dart';
 import 'package:flame_game/wall/wall.dart';
 import 'package:flutter/material.dart';
 
@@ -37,11 +35,12 @@ class Player extends BodyComponent<Forge2DGame>
     await super.onLoad();
     final Sprite sprite = await gameRef.loadSprite('tmp_player.png');
     renderBody = false;
-    //TODO(smn): replace by a real sprite + add angle support
+    // TODO(ALL): replace by a real sprite + add angle support
     await add(
       SpriteComponent()
         ..sprite = await gameRef.loadSprite('tmp_player.png')
-        ..size = Vector2.all(6)
+        // Size is the size of the sprite in pixels, all the sprites are square so we can use x directly
+        ..size = Vector2.all(size.x)
         ..anchor = Anchor.center,
     );
   }
@@ -50,18 +49,13 @@ class Player extends BodyComponent<Forge2DGame>
   Body createBody() {
     final PolygonShape shape = PolygonShape();
 
-    final List<Vector2> vertices = <Vector2>[
-      Vector2(-size.x / 2, size.y / 2),
-      Vector2(size.x / 2, size.y / 2),
-      Vector2(size.x / 2, -size.y / 2),
-      Vector2(-size.x / 2, -size.y / 2),
-    ];
-    shape.set(vertices);
-
-    // Vector2(-2, -2),
-    //   Vector2(2, -2),
-    //   Vector2(2, 2),
-    //   Vector2(-2, 2)
+    shape.setAsBox(
+      size.x / 2,
+      size.y / 2,
+      Vector2(0, 0),
+      // TODO(ALL): Add angle support
+      0,
+    );
 
     final FixtureDef fixtureDef = FixtureDef(
       shape,
@@ -84,7 +78,6 @@ class Player extends BodyComponent<Forge2DGame>
     // will be smaller and for devices with lower frame rates, it will be larger. Multiplying speed with
     // delta time ensure that player speed remains same irrespective of the device FPS.
     if (joystick.direction != JoystickDirection.idle) {
-      // position.add(joystick.relativeDelta * _playerSpeed * dt);
       body.linearVelocity = joystick.relativeDelta * _playerSpeed;
     } else {
       body.linearVelocity = Vector2(0, 0);

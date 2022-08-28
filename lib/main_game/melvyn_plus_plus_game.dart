@@ -56,15 +56,14 @@ class MelvynPlusPlusGame extends Forge2DGame with HasDraggables, HasTappables {
 
       final TiledComponent tiledMap = await TiledComponent.load(
         'map.tmx',
-        kTitleSize,
+        Vector2.all(kSpriteSize),
       );
-      _loadWall(tiledMap);
 
       joystick = Joystick();
 
       player = Player(
         position: Vector2(20, 20),
-        size: Vector2(32, 32),
+        size: Vector2(kSpriteSize / 2, kSpriteSize / 2),
         joystick: joystick,
       );
 
@@ -76,7 +75,9 @@ class MelvynPlusPlusGame extends Forge2DGame with HasDraggables, HasTappables {
       add(joystick);
       add(buttons.shootButton);
       add(buttons.actionButton);
+      _loadWall(tiledMap);
 
+      // TODO(ALL): Create a proper initialization method
       // await Future.wait(
       //   <Future<dynamic>?>[
       //     add(tiledMap),
@@ -92,57 +93,3 @@ class MelvynPlusPlusGame extends Forge2DGame with HasDraggables, HasTappables {
     }
   }
 }
-
-// class MelvynPlusPlusGame extends FlameGame
-//     with
-//         PanDetector,
-//         HasTappableComponents,
-//         HasDraggables,
-//         HasCollisionDetection {
-//   late Player player;
-//   late final JoystickComponent joystick;
-
-//   @override
-//   Future<void> onLoad() async {
-//     await super.onLoad();
-
-//     await AudioController.initialize();
-//     await AudioController.playBackgroundMusic(kAudioAmbianceFile);
-
-//     final TiledComponent tiledMap = await TiledComponent.load(
-//       'map.tmx',
-//       kTitleSize,
-//     );
-//     unawaited(add(tiledMap));
-
-//     _loadWall(tiledMap);
-//     final Paint knobPaint = BasicPalette.white.withAlpha(200).paint();
-//     final Paint backgroundPaint = BasicPalette.white.withAlpha(100).paint();
-// joystick = JoystickComponent(
-//   knob: CircleComponent(radius: 20, paint: knobPaint),
-//   background: CircleComponent(radius: 50, paint: backgroundPaint),
-//   margin: const EdgeInsets.only(left: 40, bottom: 40),
-// );
-
-//     player = Player(joystick);
-//     unawaited(add(player));
-
-//     unawaited(add(joystick));
-//   }
-
-  // void _loadWall(TiledComponent tiledMap) {
-  //   final ObjectGroup? walls =
-  //       tiledMap.tileMap.getLayer<ObjectGroup>(kWallsLayer);
-
-  //   for (final TiledObject wall in walls!.objects) {
-  //     unawaited(
-  //       add(
-  //         Wall(
-  //           size: Vector2(wall.width, wall.height),
-  //           position: Vector2(wall.x, wall.y),
-  //         ),
-  //       ),
-  //     );
-  //   }
-  // }
-// }
