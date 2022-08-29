@@ -5,7 +5,6 @@ import 'package:flame/components.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';
 import 'package:flame_game/audio/audio_controller.dart';
 import 'package:flame_game/wall/wall.dart';
-import 'package:flutter/material.dart';
 
 class Player extends BodyComponent<Forge2DGame>
     with CollisionCallbacks, ContactCallbacks {
