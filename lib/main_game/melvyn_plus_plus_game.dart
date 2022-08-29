@@ -32,6 +32,14 @@ class MelvynPlusPlusGame extends FlameGame
 
       joystick = Joystick();
 
+      camera.worldBounds = Rect.fromPoints(
+        Offset.zero,
+        Offset(
+          tiledMap.tileMap.map.width * kTitleSize.x,
+          tiledMap.tileMap.map.height * kTitleSize.x,
+        ),
+      );
+
       player = Player(joystick);
       final ActionButtons buttons = ActionButtons(player: player);
       await buttons.initialize();
