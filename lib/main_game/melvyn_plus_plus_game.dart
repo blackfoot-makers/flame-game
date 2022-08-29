@@ -12,7 +12,6 @@ import 'package:flame_game/main_game/player.dart';
 import 'package:flame_game/wall/wall.dart';
 import 'package:flame_tiled/flame_tiled.dart';
 import 'package:flutter/material.dart';
-// ignore: depend_on_referenced_packages
 import 'package:tiled/tiled.dart';
 
 /// The [MelvynPlusPlusGame] is the main game class.

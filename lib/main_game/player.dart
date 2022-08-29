@@ -106,7 +106,6 @@ class Player extends BodyComponent<Forge2DGame>
   void onCollision(Set<Vector2> intersectionPoints, PositionComponent other) {
     super.onCollision(intersectionPoints, other);
 
-    debugPrint('ON COLLISION');
     if (other is Wall) {
       body.linearVelocity = Vector2(0, 0);
     }
@@ -116,7 +115,6 @@ class Player extends BodyComponent<Forge2DGame>
   void beginContact(Object other, Contact contact) {
     super.beginContact(other, contact);
 
-    debugPrint('Begin contact');
     if (other is Wall) {
       body.linearVelocity = Vector2(0, 0);
     }

@@ -638,7 +638,7 @@ packages:
     source: hosted
     version: "0.4.9"
   tiled:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: tiled
       url: "https://pub.dartlang.org"
