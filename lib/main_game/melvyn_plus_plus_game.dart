@@ -68,23 +68,12 @@ class MelvynPlusPlusGame extends Forge2DGame with HasDraggables, HasTappables {
       final ActionButtons buttons = ActionButtons(player: player);
       await buttons.initialize();
 
-      add(tiledMap);
-      add(player);
-      add(joystick);
-      add(buttons.shootButton);
-      add(buttons.actionButton);
+      unawaited(add(tiledMap));
+      unawaited(add(player));
+      unawaited(add(joystick));
+      unawaited(add(buttons.shootButton));
+      unawaited(add(buttons.actionButton));
       _loadWall(tiledMap);
-
-      // TODO(ALL): Create a proper initialization method
-      // await Future.wait(
-      //   <Future<dynamic>?>[
-      //     add(tiledMap),
-      //     add(player)!,
-      //     add(joystick)!,
-      //     add(buttons.shootButton),
-      //     add(buttons.actionButton),
-      //   ] as Iterable<Future<dynamic>>,
-      // );
     } catch (e) {
       // TODO(Nico): Log error in crashlytics
       debugPrint('error $e');
