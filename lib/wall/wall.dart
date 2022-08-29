@@ -1,7 +1,6 @@
 import 'package:flame/collisions.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';
 import 'package:flame_game/main_game/constant.dart';
-import 'package:flutter/material.dart';
 
 class Wall extends BodyComponent<Forge2DGame> with CollisionCallbacks {
   Wall({
