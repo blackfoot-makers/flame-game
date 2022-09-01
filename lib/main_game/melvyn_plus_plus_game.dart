@@ -58,6 +58,14 @@ class MelvynPlusPlusGame extends Forge2DGame with HasDraggables, HasTappables {
 
       joystick = Joystick();
 
+      camera.worldBounds = Rect.fromPoints(
+        Offset.zero,
+        Offset(
+          tiledMap.tileMap.map.width * kSpriteSize,
+          tiledMap.tileMap.map.height * kSpriteSize,
+        ),
+      );
+
       player = Player(
         position: Vector2(20, 20),
         size: Vector2(kSpriteSize / 2, kSpriteSize / 2),
