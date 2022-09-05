@@ -8,6 +8,8 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await dotenv.load();
   await Flame.device.setLandscape();
-  final MelvynPlusPlusGame game = MelvynPlusPlusGame();
+  final MelvynPlusPlusGame game = MelvynPlusPlusGame(
+    gravity: Vector2(0, 0),
+  );
   runApp(GameWidget<MelvynPlusPlusGame>(game: game));
 }
